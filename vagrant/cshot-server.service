@@ -1,0 +1,10 @@
+[Unit]
+Description=cshot server
+
+[Service]
+Type=simple
+ExecStart=/root/go/bin/cshot-server run
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
