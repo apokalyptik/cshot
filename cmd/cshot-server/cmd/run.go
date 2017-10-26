@@ -48,6 +48,6 @@ func init() {
 	viper.BindPFlag("host", runCmd.PersistentFlags().Lookup("host"))
 	runCmd.PersistentFlags().Int("port", 80, "port to listen on")
 	viper.BindPFlag("port", runCmd.PersistentFlags().Lookup("port"))
-	runCmd.PersistentFlags().Int("procs", 10, "chrome processes to run")
+	runCmd.PersistentFlags().Int("procs", 1, "chrome processes to run")
 	viper.BindPFlag("procs", runCmd.PersistentFlags().Lookup("procs"))
 }
