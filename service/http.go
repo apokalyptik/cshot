@@ -1,14 +1,19 @@
 package service
 
 import (
+	"bytes"
 	"fmt"
+	"image"
+	"image/png"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/apokalyptik/cshot/chrome"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/nfnt/resize"
 )
 
 type Server struct {
@@ -45,6 +50,17 @@ func (s *Server) ListenAndServe(procs int) error {
 			w.WriteHeader(http.StatusInternalServerError)
 			fmt.Fprintf(w, err.Error())
 			return
+		}
+		if wStr := r.URL.Query().Get("w"); wStr != "" {
+			if width, err := strconv.Atoi(wStr); err == nil {
+				src, _, err := image.Decode(bytes.NewReader(buf))
+				if err == nil {
+					dst := resize.Resize(uint(width), 0, src, resize.Lanczos3)
+					w.Header().Set("Content-Type", "image/png")
+					png.Encode(w, dst)
+					return
+				}
+			}
 		}
 		w.Header().Set("Content-Type", "image/png")
 		w.Write(buf)
